@@ -1,0 +1,39 @@
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <script type="text/javascript" src="main.js"></script>
+        <script type="text/javascript" src="processing.js"></script>
+        <script type="text/javascript" src="statistics.js"></script>
+        <script async type="text/javascript" src="opencv.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/lodash@4.17.10/lodash.min.js"></script>
+    </head>
+    <body>
+
+        <input id="imageInput" type="file" onchange="startProcess(event)">
+        <h1 id="code"></h1>
+        <img id="image">
+        <canvas id="output"></canvas>
+    </body>
+
+
+    <script>
+        let codeElem = document.getElementById('code');
+        let imageElem = document.getElementById('image');
+        let imageInputElem = document.getElementById('imageInput');
+
+        
+
+        function startProcess(event){
+            let selectedFile = event.target.files[0];
+            imageElem.src = URL.createObjectURL(selectedFile);
+
+            imageElem.onload = function(){
+                let image = cv.imread(imageElem);
+                let image2 = decode(image);
+                cv.imshow( 'output', image2);
+                image.delete();
+                image2.delete();
+            }
+        }
+    </script>
+</html>
