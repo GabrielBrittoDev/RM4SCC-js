@@ -7,7 +7,7 @@ function decode(image){
     let features = getFeatures(contours);
     const classifier = statsForClassify(features);
     let symbols = classifySymbols(features, classifier);
-
+    convertToBinary(symbols)
 
 
     return image;
