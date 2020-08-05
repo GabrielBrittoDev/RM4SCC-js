@@ -90,3 +90,22 @@ function convertToBinary(code){
     return binaryCode;
 
 }
+
+
+function getResults(binaryCode){
+    console.log(binaryCode);
+    binaryCode.splice(2, 1);
+    console.log(binaryCode);
+    binaryCode.splice(22, 1);
+    console.log(binaryCode);
+
+    binaryCode = binaryCode.join('').split('');
+
+    let results = {
+        formatIdentifier : binaryCode.slice(0, 3),
+        issuerCode : binaryCode.slice(4, 19),
+
+    };
+
+    console.log(results);
+}

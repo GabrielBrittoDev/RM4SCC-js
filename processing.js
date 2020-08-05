@@ -48,11 +48,13 @@ function findCodeBar(image) {
 }
 
 function prepareImage(image){
+    let size = image.size();
+    let heightPercent = size.height / 100;
+    let rect = new cv.Rect(0, heightPercent * 20, size.width, heightPercent * 70);
+    image = image.roi(rect);
     cv.cvtColor(image, image, cv.COLOR_BGR2GRAY);
 
     cv.threshold(image,image,0,255,cv.THRESH_BINARY_INV+cv.THRESH_OTSU);
-
-
 
     cv.medianBlur(image, image, 3);
 
