@@ -76,7 +76,6 @@ function convertToBinary(code){
 
     let binaryCode = [];
     for (let i = 0; i < numberCode.length;i++){
-        if (i === 2 || i === 22) continue;
         let binary = numberCode[i].toString(2);
         for (let k = binary.length;k < 6;k++){
             binary = '0' + binary;
@@ -93,19 +92,24 @@ function convertToBinary(code){
 
 
 function getResults(binaryCode){
-    console.log(binaryCode);
     binaryCode.splice(2, 1);
-    console.log(binaryCode);
-    binaryCode.splice(22, 1);
-    console.log(binaryCode);
+    binaryCode.splice(9, 13);
 
-    binaryCode = binaryCode.join('').split('');
+    binaryCode = binaryCode.join('');
 
+    let serialNumber = binaryCode.slice(34, 66).split('');
+    let tracking = serialNumber.splice(20,2);
     let results = {
-        formatIdentifier : binaryCode.slice(0, 3),
-        issuerCode : binaryCode.slice(4, 19),
-
+        formatIdentifier : binaryCode.slice(0, 4),
+        issuerCode : binaryCode.slice(4, 20),
+        equipmentIdentifier : binaryCode.slice(20, 32),
+        itemPriority : binaryCode.slice(32, 34),
+        serialNumber : serialNumber.join(''),
+        tracking : tracking.join('')
     };
 
     console.log(results);
 }
+
+//011011100101111100000000101011
+//011011100101111100000000101011
