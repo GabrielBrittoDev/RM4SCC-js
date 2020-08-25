@@ -18,7 +18,6 @@ function findCodeBar(image) {
     let kernel = cv.getStructuringElement(cv.MORPH_RECT, new cv.Size(21, 7));
     cv.morphologyEx(grayImage, grayImage, cv.MORPH_CLOSE, kernel);
 
-
     cv.erode(grayImage, grayImage, kernel, new cv.Point(-1, -1), 1);
     cv.dilate(grayImage, grayImage, kernel, new cv.Point(-1, -1), 1);
 
@@ -35,15 +34,27 @@ function findCodeBar(image) {
 
     let rect = cv.boundingRect(contours.get(index));
     let rotatedRect = cv.minAreaRect(contours.get(index));
-    let rectangleColor = new cv.Scalar(255, 0, 0);
-    let vertices = cv.RotatedRect.points(rotatedRect);
-    for (let i = 0; i < 4; i++) {
-        cv.line(image, vertices[i], vertices[(i + 1) % 4], rectangleColor, 2, cv.LINE_AA, 0);
-    }
 
-    //precisa recortar certo de acordo com o angulo
+    let angle = rotatedRect.angle;
+    let rect_size = rotatedRect.size;
+
+    if (rotatedRect.angle < -45) {
+        angle += 90.0;
+        [rect_size.width, rect_size.height] = [rect_size.height, rect_size.width];
+    }
+    let M = cv.getRotationMatrix2D(rotatedRect.center, angle, 1.0);
+
+    cv.warpAffine(image, image, M, image.size(), cv.INTER_CUBIC);
+    // crop the resulting image
+
+    rect = expandRectangle(rect, image.size());
+
     image = image.roi(rect);
 
+    grayImage.delete();
+    hierarchy.delete();
+    gradX.delete();
+    gradY.delete();
     return image;
 }
 
@@ -69,4 +80,19 @@ function findContours(image){
     cv.findContours(image, contours, hierarchy, cv.RETR_TREE, cv.CHAIN_APPROX_SIMPLE);
 
     return contours;
+}
+
+
+function expandRectangle(rect, imageSize, percentage = 10){
+    let width = (rect.width / 100) * percentage;
+
+
+    if (rect.x - (width / 2) < 0){
+        return expandRectangle(rect, imageSize, --percentage);
+    }
+    rect.width += width;
+
+    rect.x -= (width / 2);
+
+    return rect;
 }

@@ -10,8 +10,8 @@ function getFeatures(contours){
 
 
     features.sort(function(a,b){
-       if (a.x > b.x)
-           return 1;
+        if (a.x > b.x)
+            return 1;
         if (a.x < b.x)
             return -1;
         return 0;
@@ -80,6 +80,4 @@ function classifySymbols(features, classifier){
     }
     console.log(code.toString());
     return code;
-
-
 }
