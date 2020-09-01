@@ -38,12 +38,23 @@ const barsToCode = {
 };
 
 
+function translateBarsToCode(bars){
+    let code = [];
+    for (let i = 1; i < bars.length - 2; i += 4){
+        code.push(barsToCode[bars[i] + bars[i + 1] + bars[i + 2] + bars[i + 3]]);
+    }
+
+    return code;
+
+}
+
 function assertBars(bars){
     let confirm = true;
 
-    confirm = bars[0] + bars[bars.size - 1] === 'AF';
+    confirm = bars[0] + bars[bars.size - 1] !== 'AF' || confirm;
 
-    console.log(confirm)
+    confirm = (bars.length - 2) % 4 !== 0 || confirm;
+
     return confirm
 
 }
